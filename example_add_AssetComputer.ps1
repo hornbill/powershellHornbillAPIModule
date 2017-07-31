@@ -19,7 +19,7 @@ $assetClass         = "computer"
 $assetTypeName      = "Desktop"
 
 # First we need to build and run an XMLMC call to get the Asset Type primary key
-# Which is required by the 
+# Which is required by the addAssetComputer API
 Add-Param       "application" "com.hornbill.servicemanager"
 Add-Param       "entity" "AssetsTypes"
 Add-Param       "matchScope" "all"
