@@ -304,10 +304,4 @@ function Invoke-XMLMC {
 }
 
 # Export the functions available to the script importing this module
-Export-ModuleMember -Function 'Set-*'
-Export-ModuleMember -Function 'Add-*'
-Export-ModuleMember -Function '*-Element'
-Export-ModuleMember -Function 'Get-Params'
-Export-ModuleMember -Function 'Clear-Params'
-Export-ModuleMember -Function 'Get-B64*'
-Export-ModuleMember -Function 'Invoke-XMLMC'
+Export-ModuleMember -Function '*'
