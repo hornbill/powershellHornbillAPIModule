@@ -1,5 +1,6 @@
 ##############################
-# Hornbill XMLMC Module for Powershell v1.0.0
+# Hornbill XMLMC API Module for Powershell
+# v1.0.1
 #
 #.DESCRIPTION
 # This module includes functions to allow your Powershell scripts to make and send API calls 
@@ -79,8 +80,10 @@ function Set-Instance {
 function Add-Param {
     Param(
         [Parameter(Mandatory=$True, HelpMessage="Specify the name of the Parameter to add")]
+        [ValidateNotNullOrEmpty()]
             [string]$ParamName,
         [Parameter(Mandatory=$True, HelpMessage="Specify the Value of the Parameter")]
+        [ValidateNotNullOrEmpty()]
             [string]$ParamValue,
         [Parameter(Mandatory=$False, HelpMessage="Specify attributes to add to the Parameter XML node")]
             [string]$ParamAttribs
@@ -113,7 +116,7 @@ function Open-Element {
     Param(
         [Parameter(Mandatory=$True, HelpMessage="Specify the name of the Parameter to add")]
         [ValidateNotNullOrEmpty()]
-        [string]$Element
+            [string]$Element
     )
     $script:XMLMCParams = $script:XMLMCParams + "<"+$Element+">"
 }
@@ -134,7 +137,7 @@ function Close-Element {
     Param(
         [Parameter(Mandatory=$True, HelpMessage="Specify the name of the Parameter to add")]
         [ValidateNotNullOrEmpty()]
-        [string]$Element
+            [string]$Element
     )
     $script:XMLMCParams = $script:XMLMCParams + "</"+$Element+">"
 }
@@ -192,7 +195,7 @@ function Get-B64Encode {
 }
 
 ##############################
-# Get-B64Encode
+# Get-B64Decode
 #
 #.DESCRIPTION
 # Returns a UTF8 string from a given Base64 endcoded string
@@ -207,7 +210,7 @@ function Get-B64Decode {
     Param(
         [Parameter(Mandatory=$True, HelpMessage="Specify the Base-64 string to decode")]
         [ValidateNotNullOrEmpty()]
-        [string]$B64Val
+            [string]$B64Val
     )
     $DecodedString = [System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($B64Val))
     return $DecodedString
@@ -244,10 +247,10 @@ function Invoke-XMLMC {
     Param(
         [Parameter(Mandatory=$True, HelpMessage="Specify the XMLMC Service")]
         [ValidateNotNullOrEmpty()]
-        [string]$XMLMCService,
+            [string]$XMLMCService,
         [Parameter(Mandatory=$True, HelpMessage="Specify the XMLMC Method")]
         [ValidateNotNullOrEmpty()]
-        [string]$XMLMCMethod
+            [string]$XMLMCMethod
     )
     $script:responseStatus = ""
     $script:responseParams = ""
@@ -272,9 +275,6 @@ function Invoke-XMLMC {
         # Invoke HTTP request
         $r = Invoke-WebRequest -Uri $script:URI -Method Post -Headers $script:headers -ContentType "text/xmlmc" -Body $script:body -ErrorAction:Stop
 
-        # Clear the XMLMC parameters now ready for the next API call
-        Clear-Params
-
         # Read and process response
         [XML]$script:xmlResponse = $r.Content
         $script:responseStatus = $script:xmlResponse.methodCallResult.status
@@ -289,6 +289,9 @@ function Invoke-XMLMC {
         $script:responseError = $_.Exception
         $script:responseStatus = "fail"
     }
+
+    # Clear the XMLMC parameters now ready for the next API call
+    Clear-Params
 
     # Return an object of the results.
     $script:resultObject = New-Object PSObject -Property @{
