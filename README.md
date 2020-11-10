@@ -2,8 +2,8 @@
 
 # THIS MODULE HAS BEEN DEPRECATED AND REPLACED BY THE FOLLOWING MODULES
 
-https://www.powershellgallery.com/packages/HornbillAPI/
-https://www.powershellgallery.com/packages/HornbillHelpers/
+- https://www.powershellgallery.com/packages/HornbillAPI/
+- https://www.powershellgallery.com/packages/HornbillHelpers/
 
 This module includes functions to allow your Powershell scripts to build and send API calls to your Hornbill instance, and then use the API responses accordingly.
 
